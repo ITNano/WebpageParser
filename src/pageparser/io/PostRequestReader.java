@@ -4,10 +4,9 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class PostRequestReader implements Reader {
 	
@@ -23,7 +22,7 @@ public class PostRequestReader implements Reader {
 	@Override
 	public String getPageSource() throws IOException {
 		URL obj = new URL(url);
-		HttpsURLConnection con = (HttpsURLConnection)obj.openConnection();
+		HttpURLConnection con = (HttpURLConnection)obj.openConnection();
  
 		//add request header
 		con.setRequestMethod("POST");
