@@ -2,7 +2,6 @@ package pageparser.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import pageparser.components.Element;
@@ -32,6 +31,7 @@ public class WebpageParser {
 			return null;
 		}
 		System.out.println("Page source fetched");
+		System.out.println(content);
 		return parseContent(content);
 	}
 	
@@ -44,9 +44,18 @@ public class WebpageParser {
 		int startPos = 0, endPos = 0, contentStartPos = 0, beginTags = 0, endTags = 0;
 		String taghead = "", tagname = "", tmp = "";
 		while(startPos<content.length()){
+			beginTags = 0; endTags = 0;
 			startPos = content.indexOf('<');
 			if(startPos<0)break;
-			endPos = content.indexOf('>', startPos);		//FIXME can give wrong result! check quotes.
+			endPos = startPos;
+			do{
+				endPos = content.indexOf('>', endPos+1);
+				if(endPos<0)break;
+				endTags++;
+				tmp = content.substring(startPos, endPos);
+				contentStartPos = 0;
+				while((contentStartPos = tmp.indexOf('<', contentStartPos+1)) >= 0)beginTags++;
+			}while(endPos >= 0 && endTags <= beginTags);
 			if(endPos<0)break;
 			taghead = content.substring(startPos, endPos+1);
 			tagname = ElementFactory.getTagName(taghead);
